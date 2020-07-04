@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreClassRequest;
 use App\Http\Requests\UpdateClassRequest;
+use App\Http\Resources\ClassCollection;
 use App\Http\Resources\ClassResource;
 use App\StudentClass;
 use Illuminate\Http\JsonResponse;
@@ -16,22 +17,22 @@ class ClassController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return AnonymousResourceCollection
+     * @return ClassCollection
      */
     public function index()
     {
-        return ClassResource::collection(StudentClass::paginate(20));
+        return new ClassCollection(StudentClass::paginate(20));
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param StoreClassRequest $request
-     * @return ClassResource
+     * @return JsonResponse
      */
     public function store(StoreClassRequest $request)
     {
-        $class = StudentClass::create([
+        StudentClass::create([
             'code' => Str::snake($request->code),
             'name' => $request->name,
             'maximum_students' => $request->maximum_students,
@@ -39,8 +40,9 @@ class ClassController extends Controller
             'description' => $request->description,
         ]);
 
-        return new ClassResource($class);
-
+        return response()->json([
+            'msg' => 'Created Successfully'
+        ]);
     }
 
     /**
@@ -59,7 +61,7 @@ class ClassController extends Controller
      *
      * @param UpdateClassRequest $request
      * @param StudentClass $class
-     * @return ClassResource
+     * @return JsonResponse
      */
     public function update(UpdateClassRequest $request, StudentClass $class)
     {
@@ -71,7 +73,9 @@ class ClassController extends Controller
 
         $class->update($classFields);
 
-        return new ClassResource($class);
+        return response()->json([
+            'msg' => 'Updated Successfully'
+        ]);
     }
 
     /**

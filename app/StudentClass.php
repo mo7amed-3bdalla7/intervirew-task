@@ -18,4 +18,9 @@ class StudentClass extends Model
 
     const OPENED_STATUS = 'opened';
     const CLOSED_STATUS = 'closed';
+
+    public function students()
+    {
+        return $this->hasMany(Student::class,'class_id');
+    }
 }
