@@ -15,3 +15,4 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::apiResource('classes','ClassController');
+Route::apiResource('students','StudentController');
